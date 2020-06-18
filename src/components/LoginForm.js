@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text } from 'react-native';
-import { Card, CardSection, Input, Button } from './common/';
+import { Card, CardSection, Input, Button, Spinner } from './common/';
 import { connect} from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from './actions/index';
 
@@ -17,6 +17,33 @@ class LoginForm extends React.Component{
         const { email, password } = this.props;
 
         this.props.loginUser({ email, password });
+    }
+
+    renderButton(){
+        if(this.props.loading){
+            return(
+                <Spinner size="large"/>
+            )
+        }
+        else{
+            return(
+                <Button onPress={this.onButtonPress.bind(this)}>
+                        Login
+                </Button>
+            )
+        }
+    }
+
+    renderError(){
+        if(this.props.error){
+            return(
+                <View style={{backgroundColor:'white'}}>
+                    <Text style = {styles.errorTextStyle}>
+                        {this.props.error}
+                    </Text>
+                </View>
+            )
+        }
     }
     render() {
         return(
@@ -36,12 +63,12 @@ class LoginForm extends React.Component{
                     label = "Password"
                     placeholder = "password"
                     onChangeText = {this.onPasswordChange.bind(this)}
+                    value = {this.props.password}
                     />
                 </CardSection>
+                {this.renderError()}
                 <CardSection>
-                    <Button onPress={this.onButtonPress.bind(this)}>
-                        Login
-                    </Button>
+                {this.renderButton()}
                 </CardSection>
             </Card>
             </View>
@@ -58,12 +85,20 @@ const styles = {
         width:300,
         marginLeft:30
     },
+    errorTextStyle: {
+        fontSize: 15,
+        alignSelf: 'center',
+        color: 'red'
+    }
 }
 
 const mapStateToProps = state => {
     return{
-       .auth.email,
-        password: st email: stateate.auth.password
+        email: state.auth.email,
+        password: state.auth.password,
+        user: state.auth.user,
+        error: state.auth.error,
+        loading: state.auth.loading
     };
 };
 
