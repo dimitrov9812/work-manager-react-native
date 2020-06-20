@@ -25,7 +25,7 @@ class LoginForm extends React.Component{
                 <Spinner size="large"/>
             )
         }
-        else{
+        else{ 
             return(
                 <Button onPress={this.onButtonPress.bind(this)}>
                         Login
